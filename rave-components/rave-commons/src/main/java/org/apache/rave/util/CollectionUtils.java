@@ -136,7 +136,7 @@ public class CollectionUtils {
      * @param target the list to add items to
      * @param <T>  the type of the source & target lists
      */
-    public static <T> void addUniqueValues(List<T> source, List<T> target) {
+    public static <T> void addUniqueValues(List<? extends T> source, List<T> target) {
         for(T item : source) {
             if(!target.contains(item)) {
                 target.add(item);

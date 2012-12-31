@@ -22,9 +22,11 @@ package org.apache.rave.opensocial.service.impl;
 import com.google.common.collect.Lists;
 import org.apache.rave.opensocial.repository.OpenSocialPersonRepository;
 import org.apache.rave.opensocial.service.SimplePersonService;
+import org.apache.rave.opensocial.service.impl.json.Persons;
 import org.apache.rave.util.CollectionUtils;
 import org.apache.shindig.auth.AbstractSecurityToken;
 import org.apache.shindig.auth.SecurityToken;
+import org.apache.shindig.common.crypto.BlobCrypterException;
 import org.apache.shindig.common.util.ImmediateFuture;
 import org.apache.shindig.protocol.ProtocolException;
 import org.apache.shindig.protocol.RestfulCollection;
@@ -37,6 +39,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -121,10 +125,21 @@ public class DefaultPersonService implements PersonService, SimplePersonService 
         return people;
     }
 
-    private List<org.apache.rave.portal.model.Person> getFriendsFromRepository(CollectionOptions collectionOptions,
+    private List<? extends org.apache.rave.portal.model.Person> getFriendsFromRepository(CollectionOptions collectionOptions,
                                                                                    String appId,
                                                                                    String userId) {
 
+    	try {
+			Persons p = new JsonClient("http://localhost/system/opensocial/personservice", userId, userId).retrieveJsonObject(Persons.class);
+			return p.getResults();
+		} catch (BlobCrypterException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+    	
+    	
+    	/*
         String filter = collectionOptions == null ? null : collectionOptions.getFilter();
         List<org.apache.rave.portal.model.Person> current;
         //Currently ignoring TOP FRIENDS as it hasn't been defined what a top friend is
@@ -142,6 +157,7 @@ public class DefaultPersonService implements PersonService, SimplePersonService 
             current = repository.findFriends(userId, filter, collectionOptions.getFilterOperation(), collectionOptions.getFilterValue());
         }
         return current;
+        */
     }
 
     private List<org.apache.rave.portal.model.Person> getConnectedPeopleFromRepository(CollectionOptions collectionOptions,

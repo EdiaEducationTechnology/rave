@@ -55,22 +55,17 @@ public class SecurityTokenServiceTest {
     private Widget validWidget;
     private Widget bogusWidget;
 
-    private final String VALID_REGION_WIDGET_ID = "1";
+    private final String VALID_REGION_WIDGET_ID = "108";
     private final String VALID_USER_ID = "1";
-    private final String VALID_USER_NAME = "jdoe";
-    private final String VALID_URL = "http://example.com/test.xml";
+    private final String VALID_USER_NAME = "bert";
+    private final String VALID_URL = "http://localhost:8080/demogadgets/friends.xml";
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() throws IOException {
         return Arrays.asList(new Object[][]{
-                //Run the tests once using an embedded key
-                {EncryptedBlobSecurityTokenService.EMBEDDED_KEY_PREFIX + "insecure-security-token-test-key"},
-
+                
                 //And again with a classpath reference to an external key file
-                {EncryptedBlobSecurityTokenService.CLASSPATH_KEY_PREFIX + "security_token_encryption_key.txt"},
-
-                //And again with a direct filesystem reference to an external key file
-                {new ClassPathResource("security_token_encryption_key.txt").getFile().getAbsolutePath()}
+                {EncryptedBlobSecurityTokenService.CLASSPATH_KEY_PREFIX + "security_token_encryption_key.txt"}
         });
     }
 
