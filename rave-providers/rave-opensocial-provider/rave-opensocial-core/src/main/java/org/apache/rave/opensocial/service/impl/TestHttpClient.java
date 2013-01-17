@@ -10,6 +10,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.shindig.auth.ShindigTokenCrypter;
 import org.apache.shindig.common.crypto.BlobCrypterException;
 
 public class TestHttpClient {
@@ -20,7 +21,7 @@ public class TestHttpClient {
 
 			DefaultHttpClient httpClient = new DefaultHttpClient();
 
-			ShindigToken st = new ShindigToken("bert1", "bert1");
+			ShindigTokenCrypter st = new ShindigTokenCrypter("bert1", "bert1", "", "");
 
 			HttpGet getRequest = new HttpGet(
 					"http://localhost/system/opensocial/personservice?token="

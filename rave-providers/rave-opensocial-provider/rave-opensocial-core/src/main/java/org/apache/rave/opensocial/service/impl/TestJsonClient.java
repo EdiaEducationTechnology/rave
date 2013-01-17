@@ -10,7 +10,7 @@ public class TestJsonClient {
 	public static void main(String[] args) throws BlobCrypterException, IOException {
 
 		
-		Persons p = new JsonClient("http://localhost/system/opensocial/personservice", "bert1", "bert1").retrieveJsonObject(Persons.class);
+		Persons p = new JsonClient("http://localhost/system/opensocial/personservice", "bert1", "bert1", "").retrieveJsonObject(Persons.class);
 		
 		System.out.println(p);
 

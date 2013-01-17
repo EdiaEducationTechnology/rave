@@ -108,7 +108,7 @@ public class DefaultPersonService implements PersonService, SimplePersonService 
         List<org.apache.rave.portal.model.Person> people = new ArrayList<org.apache.rave.portal.model.Person>();
         for (UserId id : userIds) {
             org.apache.rave.portal.model.Person person = this.getPersonForId(id, token);
-            CollectionUtils.addUniqueValues(getFriendsFromRepository(collectionOptions, token.getAppId(), person.getUsername()), people);
+            CollectionUtils.addUniqueValues(getFriendsFromRepository(collectionOptions, token.getAppId(), person.getUsername(), token.getModuleId()), people);
         }
         return people;
     }
@@ -127,10 +127,11 @@ public class DefaultPersonService implements PersonService, SimplePersonService 
 
     private List<? extends org.apache.rave.portal.model.Person> getFriendsFromRepository(CollectionOptions collectionOptions,
                                                                                    String appId,
-                                                                                   String userId) {
+                                                                                   String userId,
+                                                                                   long moduleId) {
 
     	try {
-			Persons p = new JsonClient("http://localhost/system/opensocial/personservice", userId, userId).retrieveJsonObject(Persons.class);
+			Persons p = new JsonClient("http://localhost:9080/system/opensocial/personservice", userId, userId, String.valueOf(moduleId)).retrieveJsonObject(Persons.class);
 			return p.getResults();
 		} catch (BlobCrypterException e) {
 			throw new RuntimeException(e);

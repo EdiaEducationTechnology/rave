@@ -6,6 +6,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.shindig.auth.ShindigTokenCrypter;
 import org.apache.shindig.common.crypto.BlobCrypterException;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.map.MappingJsonFactory;
@@ -14,11 +15,13 @@ public class JsonClient {
 	private final String url;
 	private final String ownerId;
 	private final String viewerId;
+	private final String widgetId;
 
-	public JsonClient(String url, String ownerId, String viewerId) {
+	public JsonClient(String url, String ownerId, String viewerId, String widgetId) {
 		this.url = url;
 		this.ownerId = ownerId;
 		this.viewerId = viewerId;
+		this.widgetId = widgetId;
 	}
 
 	public <T> T retrieveJsonObject(Class<T> objectClass)
@@ -26,7 +29,7 @@ public class JsonClient {
 
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 
-		ShindigToken st = new ShindigToken(ownerId, viewerId);
+		ShindigTokenCrypter st = new ShindigTokenCrypter(ownerId, viewerId, widgetId, url);
 
 		HttpGet getRequest = new HttpGet(url + "?token="
 				+ st.getEncryptedToken());
